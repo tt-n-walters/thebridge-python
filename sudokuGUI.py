@@ -18,7 +18,7 @@ def tile_clicked(event):
     # Keypress event to allow entering a number into the grid
     def keypressed(event):
         label["background"] = "white"
-        if event.char.isdigit():
+        if event.char.isdigit() and not event.char == "0":
             number_typed = event.char
             label["text"] = number_typed
         window.unbind("<Key>")
