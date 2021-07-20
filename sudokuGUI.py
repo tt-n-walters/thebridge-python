@@ -2,9 +2,11 @@ import tkinter as tk
 
 
 def tile_clicked(event):
+    # Get the widget that was clicked on, highlight it
     label = event.widget
     label["background"] = "yellow"
-    
+
+    # Work out the tile's position, based on the number in the name
     name = str(label)
     if name == ".!label":
         number = 0
@@ -13,12 +15,13 @@ def tile_clicked(event):
     row = number // 9
     column = number % 9
 
+    # Keypress event to allow entering a number into the grid
     def keypressed(event):
+        label["background"] = "white"
         if event.char.isdigit():
             number_typed = event.char
             label["text"] = number_typed
         window.unbind("<Key>")
-        label["background"] = "white"
 
     window.bind("<Key>", keypressed)
 
