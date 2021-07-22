@@ -13,10 +13,9 @@ class Window(arcade.Window):
         self.gem_image = arcade.load_texture(":resources:images/items/gemYellow.png")
         self.gem_x = []
         self.gem_y = []
-        for i in range(10):
+        for i in range(0):
             self.gem_x.append(random.randint(50, 1500))
             self.gem_y.append(random.randint(50, 850))
-        self.score = 0
 
         self.numbers = []
         for i in range(10):
@@ -24,6 +23,12 @@ class Window(arcade.Window):
             number = arcade.Sprite(image_name, 4)
             number.alpha = 70
             self.numbers.append(number)
+        
+        # Amount of time game has been running
+        self.time = 0
+        self.score = 0
+
+        self.gems_created = 0
 
 
     def get_numbers(self, value):
@@ -34,6 +39,7 @@ class Window(arcade.Window):
         as_string = str(value)
 
         for i in range(len(as_string)):
+            # Get each digit
             digit = int(as_string[i])
 
             # Get number images for each digit
@@ -63,6 +69,15 @@ class Window(arcade.Window):
 
 
     def on_update(self, deltatime):
+        self.time = self.time + deltatime
+        
+        # Check if enough time has passed to create a new gem
+        if self.time > self.gems_created * 2:
+            self.gem_x.append(random.randint(50, 1500))
+            self.gem_y.append(random.randint(50, 850))
+            self.gems_created = self.gems_created + 1
+
+        # Loop through all gems, check distance between gem and the player
         for i in range(len(self.gem_x)):
             x = self.gem_x[i]
             y = self.gem_y[i]
