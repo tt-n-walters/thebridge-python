@@ -16,9 +16,40 @@ class Window(arcade.Window):
         for i in range(10):
             self.gem_x.append(random.randint(50, 1500))
             self.gem_y.append(random.randint(50, 850))
+        self.score = 0
+
+        self.numbers = []
+        for i in range(10):
+            image_name = "numbers/" + str(i) + ".png"
+            number = arcade.Sprite(image_name, 4)
+            number.alpha = 70
+            self.numbers.append(number)
+
+
+    def get_numbers(self, value):
+        """ Converts an integer input to a series of number sprites.
+        """
+        last = 0
+        # Split the value into digits
+        as_string = str(value)
+
+        for i in range(len(as_string)):
+            digit = int(as_string[i])
+
+            # Get number images for each digit
+            number = self.numbers[digit]
+            number.left = last
+            number.bottom = 0
+            last = number.right
+
+            # Draw the number images
+            number.draw()
+
+
     
     def on_draw(self):
         arcade.start_render()
+
         # Draw slime character
         arcade.draw_texture_rectangle(self.x, self.y, self.image.width, self.image.height, self.image)
         # Draw gem
@@ -26,6 +57,10 @@ class Window(arcade.Window):
             x = self.gem_x[i]
             y = self.gem_y[i]
             arcade.draw_texture_rectangle(x, y, self.gem_image.width, self.gem_image.height, self.gem_image)
+        
+        self.get_numbers(self.score)
+        
+
 
     def on_update(self, deltatime):
         for i in range(len(self.gem_x)):
@@ -37,10 +72,13 @@ class Window(arcade.Window):
             if distance < 75:
                 self.gem_x[i] = random.randint(50, 1550)
                 self.gem_y[i] = random.randint(50, 850)
+                self.score = self.score + 1
     
+
     def on_mouse_motion(self, x, y, dx, dy):
         self.x = x
         self.y = y
+    
     
     def on_key_press(self, symbol, modifiers):
         if symbol == arcade.key.ESCAPE:
